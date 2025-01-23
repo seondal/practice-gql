@@ -20,6 +20,12 @@ const typeDefs = gql`
     # GET /tweet/:id
     tweet(id: ID): Tweet
   }
+
+  type Mutation {
+    # POST /postTweet
+    postTweet(text: String, userId: ID): Tweet
+    deleteTweet(id: ID): Boolean
+  }
 `;
 
 const server = new ApolloServer({ typeDefs });
