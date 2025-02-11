@@ -1,5 +1,13 @@
 import { ApolloServer, gql } from "apollo-server";
 
+// fake DB
+const tweets = [
+  { id: "1", text: "hello" },
+  { id: "2", text: "hell" },
+  { id: "3", text: "hel" },
+  { id: "4", text: "he" },
+];
+
 // Schema Dafinition Language
 const typeDefs = gql`
   type User {
@@ -8,8 +16,8 @@ const typeDefs = gql`
     firstName: String # String | null
   }
   type Tweet {
-    id: ID
-    text: String
+    id: ID!
+    text: String!
     author: User
   }
 
@@ -20,6 +28,8 @@ const typeDefs = gql`
 
     # GET /tweet/:id
     tweet(id: ID!): Tweet
+
+    ping: String!
   }
 
   type Mutation {
@@ -29,7 +39,18 @@ const typeDefs = gql`
   }
 `;
 
-const server = new ApolloServer({ typeDefs });
+const resolvers = {
+  Query: {
+    allTweets() {
+      return tweets;
+    },
+    tweet(root, { id }) {
+      return tweets.find((tweet) => tweet.id === id);
+    },
+  },
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
 
 server.listen().then(({ url }) => {
   console.log(`Running on ${url}`);
