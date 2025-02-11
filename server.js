@@ -3,8 +3,9 @@ import { ApolloServer, gql } from "apollo-server";
 // Schema Dafinition Language
 const typeDefs = gql`
   type User {
-    id: ID
-    username: String
+    id: ID!
+    username: String! # String
+    firstName: String # String | null
   }
   type Tweet {
     id: ID
@@ -15,16 +16,16 @@ const typeDefs = gql`
   # 사용자의 모든 요청
   type Query {
     # GET /allTweets
-    allTweets: [Tweet]
+    allTweets: [Tweet!]!
 
     # GET /tweet/:id
-    tweet(id: ID): Tweet
+    tweet(id: ID!): Tweet
   }
 
   type Mutation {
     # POST /postTweet
-    postTweet(text: String, userId: ID): Tweet
-    deleteTweet(id: ID): Boolean
+    postTweet(text: String!, userId: ID!): Tweet!
+    deleteTweet(id: ID!): Boolean!
   }
 `;
 
